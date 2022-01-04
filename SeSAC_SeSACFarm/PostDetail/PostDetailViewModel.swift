@@ -7,18 +7,24 @@
 
 import UIKit
 
+enum buttonStatus: String {
+    case postComment
+    case editComment
+}
+
 class PostDetailViewModel {
     
     var currentPost: Observable<PostElement> = Observable(PostElement(id: 0, text: "", user: Writer(id: 0, username: "", email: ""), createdAt: "", comments: []))
     var currentComments: Observable<DetailComment> = Observable([])
     var commentText: Observable<String> = Observable("")
+    var currentCommentIndex: Int = 0
+    var currentStatus: buttonStatus = .postComment
     
     func deletePost(completion: @escaping () -> Void) {
         let postID = currentPost.value.id
         APIService.deletePost(id: postID) { post, error in
             completion()
         }
-        
     }
     
     func getComments(completion: @escaping () -> Void) {
@@ -39,8 +45,23 @@ class PostDetailViewModel {
         }
     }
     
-    func deleteComment(index: Int, completion: @escaping () -> Void) {
-        let id = currentComments.value[index].id
+    func readyUpdateComment(index: Int, completion: @escaping (DetailCommentElement) -> Void) {
+        currentStatus = .editComment
+        currentCommentIndex = index
+        let currentComment = currentComments.value[currentCommentIndex]
+        completion(currentComment)
+    }
+    
+    func updateComment(completion: @escaping () -> Void) {
+        let id = currentComments.value[currentCommentIndex].id
+        APIService.updateComment(comment: commentText.value, postID: currentPost.value.id, commentID: id) { comment, error in
+            print(comment)
+            completion()
+        }
+    }
+    
+    func deleteComment(completion: @escaping () -> Void) {
+        let id = currentComments.value[currentCommentIndex].id
         APIService.deleteComment(id: id) { comment, error in
             print(comment)
             completion()

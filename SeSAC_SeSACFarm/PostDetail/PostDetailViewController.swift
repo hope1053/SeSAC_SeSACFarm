@@ -103,8 +103,15 @@ class PostDetailViewController: UIViewController {
     @objc func commentAddButtonTapped() {
         commentView.commentTextView.resignFirstResponder()
         commentView.commentTextView.text = ""
-        viewModel.postComment {
-            self.loadCommenets()
+        switch viewModel.currentStatus {
+        case .postComment:
+            viewModel.postComment {
+                self.loadCommenets()
+            }
+        case .editComment:
+            viewModel.updateComment {
+                self.loadCommenets()
+            }
         }
     }
     
@@ -144,7 +151,10 @@ class PostDetailViewController: UIViewController {
                 
                 self.navigationController?.pushViewController(vc, animated: true)
             case .comment:
-                print("댓글 수정")
+                self.commentView.commentTextView.becomeFirstResponder()
+                self.viewModel.readyUpdateComment(index: index!) { comment in
+                    self.commentView.commentTextView.text = comment.comment
+                }
             }
         }
         let delete = UIAlertAction(title: "삭제", style: .destructive) { _ in
@@ -178,7 +188,7 @@ class PostDetailViewController: UIViewController {
                     self.navigationController?.popViewController(animated: true)
                 }
             case .comment:
-                self.viewModel.deleteComment(index: index!) {
+                self.viewModel.deleteComment {
                     self.loadCommenets()
                 }
             }

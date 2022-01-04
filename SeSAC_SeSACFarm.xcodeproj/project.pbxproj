@@ -11,6 +11,7 @@
 		CB4554EC278419EA00FF359C /* PostHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB4554EB278419EA00FF359C /* PostHeaderView.swift */; };
 		CB4554EE27841EC000FF359C /* PostDetailTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB4554ED27841EC000FF359C /* PostDetailTableViewCell.swift */; };
 		CB4554F0278453D800FF359C /* CommentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB4554EF278453D800FF359C /* CommentView.swift */; };
+		CB4554F22784746300FF359C /* JSONData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB4554F12784746300FF359C /* JSONData.swift */; };
 		CB794BEB278199DF00DCA4DC /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB794BEA278199DF00DCA4DC /* UIColor+Extension.swift */; };
 		CB794BEF27819BA300DCA4DC /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB794BEE27819BA300DCA4DC /* RegisterViewController.swift */; };
 		CB794BF127819BC700DCA4DC /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB794BF027819BC700DCA4DC /* LoginViewController.swift */; };
@@ -47,6 +48,7 @@
 		CB4554EB278419EA00FF359C /* PostHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostHeaderView.swift; sourceTree = "<group>"; };
 		CB4554ED27841EC000FF359C /* PostDetailTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailTableViewCell.swift; sourceTree = "<group>"; };
 		CB4554EF278453D800FF359C /* CommentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentView.swift; sourceTree = "<group>"; };
+		CB4554F12784746300FF359C /* JSONData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONData.swift; sourceTree = "<group>"; };
 		CB794BEA278199DF00DCA4DC /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		CB794BEE27819BA300DCA4DC /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		CB794BF027819BC700DCA4DC /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -221,6 +223,7 @@
 				CBF51BB12781979C00EEAEB5 /* User.swift */,
 				CBE5B7662781C63A00828151 /* Post.swift */,
 				CB4554E9278415B800FF359C /* Comment.swift */,
+				CB4554F12784746300FF359C /* JSONData.swift */,
 			);
 			path = Struct;
 			sourceTree = "<group>";
@@ -321,6 +324,7 @@
 				CBF51B902781968600EEAEB5 /* AppDelegate.swift in Sources */,
 				CB794BF52781A36F00DCA4DC /* LoginViewModel.swift in Sources */,
 				CBF51BAF2781978C00EEAEB5 /* StartView.swift in Sources */,
+				CB4554F22784746300FF359C /* JSONData.swift in Sources */,
 				CB4554EE27841EC000FF359C /* PostDetailTableViewCell.swift in Sources */,
 				CBF51B922781968600EEAEB5 /* SceneDelegate.swift in Sources */,
 				CB794BFA2781A39700DCA4DC /* PostListViewController.swift in Sources */,

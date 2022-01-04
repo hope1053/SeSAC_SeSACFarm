@@ -96,6 +96,24 @@ class APIService {
         URLSession.request(endpoint: request, completion: completion)
     }
     
+    static func updateComment(comment: String, postID: Int, commentID: Int, completion: @escaping (DetailCommentElement?, APIError?) -> Void) {
+        print(comment, postID, commentID)
+        var request = URLRequest(url: Endpoint.editComment(id: commentID).url)
+        request.httpMethod = Method.PUT.rawValue
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let updateData = commentData(comment: comment, post: postID)
+        let updateJsonData = try? JSONEncoder().encode(updateData)
+        print(updateJsonData)
+//        request.httpBody = "comment=\(comment)&post=\(postID)".data(using: .utf8, allowLossyConversion: false)
+//        request.httpBody = updateJsonData
+        
+        let loginToken = UserDefaults.standard.value(forKey: "token") ?? ""
+        request.setValue("Bearer \(loginToken)", forHTTPHeaderField: "Authorization")
+        
+        URLSession.uploadRequest(endpoint: request, data: updateJsonData!, completion: completion)
+    }
+    
     static func deleteComment(id: Int, completion: @escaping (DetailCommentElement?, APIError?) -> Void) {
         var request = URLRequest(url: Endpoint.editComment(id: id).url)
         request.httpMethod = Method.DELETE.rawValue
