@@ -12,6 +12,8 @@ class PostDetailTableViewCell: UITableViewCell {
     
     static let identifier = "PostDetailTableViewCell"
     
+    var commentEditButtonClosure: (() -> Void)?
+    
     let usernameLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 13, weight: .semibold)
@@ -21,6 +23,7 @@ class PostDetailTableViewCell: UITableViewCell {
     let commentLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 15)
+        label.numberOfLines = 0
         return label
     }()
     
@@ -33,12 +36,12 @@ class PostDetailTableViewCell: UITableViewCell {
     }()
     
     @objc func commentEditButtonTapped() {
-        print("tapped")
+        commentEditButtonClosure!()
     }
     
-    func configureView() {
+    func configureView() {        
         [usernameLabel, commentLabel, editButton].forEach { subView in
-            self.addSubview(subView)
+            self.contentView.addSubview(subView)
         }
         
         usernameLabel.snp.makeConstraints { make in

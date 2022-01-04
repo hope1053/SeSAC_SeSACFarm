@@ -45,20 +45,22 @@ class APIService {
         let loginToken = UserDefaults.standard.value(forKey: "token") ?? ""
         var request = URLRequest(url: Endpoint.post.url)
         request.httpMethod = Method.POST.rawValue
-        request.httpBody = "text=\(text)".data(using: .utf8, allowLossyConversion: false)
+        let data = "text=\(text)".data(using: .utf8, allowLossyConversion: false)
         request.setValue("Bearer \(loginToken)", forHTTPHeaderField: "Authorization")
-        
-        URLSession.request(endpoint: request, completion: completion)
+
+        URLSession.uploadRequest(endpoint: request, data: data!, completion: completion)
     }
     
     static func editPost(id: Int, text: String, completion: @escaping (PostElement?, APIError?) -> Void) {
         let loginToken = UserDefaults.standard.value(forKey: "token") ?? ""
+        
+        let data = "text=\(text)".data(using: .utf8, allowLossyConversion: false)
+        
         var request = URLRequest(url: Endpoint.editPost(id: id).url)
         request.httpMethod = Method.PUT.rawValue
-        request.httpBody = "text=\(text)".data(using: .utf8, allowLossyConversion: false)
         request.setValue("Bearer \(loginToken)", forHTTPHeaderField: "Authorization")
         
-        URLSession.request(endpoint: request, completion: completion)
+        URLSession.uploadRequest(endpoint: request, data: data!, completion: completion)
     }
     
     static func deletePost(id: Int, completion: @escaping (PostElement?, APIError?) -> Void) {
@@ -76,7 +78,6 @@ class APIService {
         
         var urlComponent = URLComponents(string: "\(Endpoint.comment.url)")
         urlComponent?.queryItems = [URLQueryItem(name: "post", value: "\(postID)")]
-        print(urlComponent?.url)
         var request = URLRequest(url: (urlComponent?.url!)!)
         request.httpMethod = Method.GET.rawValue
         request.setValue("Bearer \(loginToken)", forHTTPHeaderField: "Authorization")

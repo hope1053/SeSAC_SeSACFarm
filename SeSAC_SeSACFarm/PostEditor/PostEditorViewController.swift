@@ -63,6 +63,7 @@ class PostEditorViewController: UIViewController {
             }
         case .edit:
             viewModel.editDetail { post in
+                print(post)
                 self.editCompletionHandler?(post!)
                 self.navigationController?.popViewController(animated: true)
             }

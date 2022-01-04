@@ -43,7 +43,7 @@ class PostHeaderView: UIView {
         }
         
         usernameLabel.snp.makeConstraints { make in
-            make.top.equalTo(self.safeAreaLayoutGuide)
+            make.top.equalTo(self.safeAreaLayoutGuide).offset(20)
             make.leading.equalToSuperview().offset(20)
         }
 

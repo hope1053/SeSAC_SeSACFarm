@@ -35,4 +35,8 @@ struct Writer: Codable {
     let username, email: String
 }
 
+struct sendingData: Codable {
+    let text: String
+}
+
 typealias Post = [PostElement]

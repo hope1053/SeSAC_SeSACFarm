@@ -8,9 +8,14 @@
 import UIKit
 import SnapKit
 
+enum buttonType: String {
+    case post
+    case comment
+}
+
 class PostDetailViewController: UIViewController {
     
-    let detailTableView = UITableView()
+    let detailTableView = UITableView(frame: .zero, style: .grouped)
     
     let viewModel = PostDetailViewModel()
     var currentPost: PostElement?
@@ -63,32 +68,37 @@ class PostDetailViewController: UIViewController {
         let myID = UserDefaults.standard.value(forKey: "id") as? Int
         
         if writerID == myID {
-            showActionSheet()
+            showActionSheet(type: .post)
         } else {
             showAlert()
         }
     }
     
-    func showActionSheet() {
+    func showActionSheet(type: buttonType) {
         let alert = UIAlertController(title: "메뉴", message: "", preferredStyle: .actionSheet)
         
         let edit = UIAlertAction(title: "수정", style: .default) { _ in
-            let vc = PostEditorViewController()
-            let id = self.currentPost?.id ?? 0
-            let text = self.currentPost?.text ?? ""
-            
-            vc.type = .edit
-            vc.viewModel.id = id
-            vc.viewModel.bodyText.value = text
-            
-            vc.editCompletionHandler = { post in
-                self.viewModel.currentPost.value = post
+            switch type {
+            case .post:
+                let vc = PostEditorViewController()
+                let id = self.currentPost?.id ?? 0
+                let text = self.currentPost?.text ?? ""
+                
+                vc.type = .edit
+                vc.viewModel.id = id
+                vc.viewModel.bodyText.value = text
+                
+                vc.editCompletionHandler = { post in
+                    self.viewModel.currentPost.value = post
+                }
+                
+                self.navigationController?.pushViewController(vc, animated: true)
+            case .comment:
+                print("댓글 수정")
             }
-            
-            self.navigationController?.pushViewController(vc, animated: true)
         }
         let delete = UIAlertAction(title: "삭제", style: .destructive) { _ in
-            self.checkAlert()
+            self.checkAlert(type: type)
         }
         let cancel = UIAlertAction(title: "취소", style: .cancel)
         
@@ -108,12 +118,17 @@ class PostDetailViewController: UIViewController {
         present(alert, animated: true, completion: nil)
     }
     
-    func checkAlert() {
-        let alert = UIAlertController(title: "알림", message: "글을 삭제하시겠습니까?", preferredStyle: .alert)
+    func checkAlert(type: buttonType) {
+        let alert = UIAlertController(title: "알림", message: "정말로 삭제하시겠습니까?", preferredStyle: .alert)
         
         let ok = UIAlertAction(title: "확인", style: .default) { _ in
-            self.viewModel.deletePost {
-                self.navigationController?.popViewController(animated: true)
+            switch type {
+            case .post:
+                self.viewModel.deletePost {
+                    self.navigationController?.popViewController(animated: true)
+                }
+            case .comment:
+                print("댓글 삭제")
             }
         }
         let cancel = UIAlertAction(title: "취소", style: .cancel)
@@ -142,6 +157,17 @@ extension PostDetailViewController: UITableViewDelegate, UITableViewDataSource {
         
         cell.usernameLabel.text = row.user.username
         cell.commentLabel.text = row.comment
+        cell.commentEditButtonClosure = {
+            let writerID = row.user.id
+            // 로그인 다시 한 번 진행 후 확인해야함
+            let myID = UserDefaults.standard.value(forKey: "id") as? Int
+            
+            if writerID == myID {
+                self.showActionSheet(type: .comment)
+            } else {
+                self.showAlert()
+            }
+        }
         return cell
     }
     
