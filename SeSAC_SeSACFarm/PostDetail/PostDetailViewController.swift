@@ -10,38 +10,18 @@ import SnapKit
 
 class PostDetailViewController: UIViewController {
     
-    let usernameLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 13, weight: .semibold)
-        return label
-    }()
-    
-    let dateLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 13, weight: .semibold)
-        label.textColor = .lightGray
-        return label
-    }()
-    
-    let textLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 15)
-        label.numberOfLines = 0
-        return label
-    }()
-    
-    let commentLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 13, weight: .semibold)
-        label.textColor = .lightGray
-        return label
-    }()
+    let detailTableView = UITableView()
     
     let viewModel = PostDetailViewModel()
     var currentPost: PostElement?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        detailTableView.delegate = self
+        detailTableView.dataSource = self
+        
+        detailTableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
         
         view.backgroundColor = .white
         connectView()
@@ -61,36 +41,13 @@ class PostDetailViewController: UIViewController {
     func configureView() {
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "ellipsis"), style: .plain, target: self, action: #selector(menuButtonTapped))
         
-        [usernameLabel, dateLabel, textLabel, commentLabel].forEach { subView in
-            view.addSubview(subView)
-        }
+        view.addSubview(detailTableView)
         
-        usernameLabel.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide).offset(15)
-            make.leading.equalToSuperview().offset(20)
-        }
+        detailTableView.backgroundColor = .brown
         
-        dateLabel.snp.makeConstraints { make in
-            make.top.equalTo(usernameLabel.snp.bottom)
-            make.leading.equalTo(usernameLabel)
+        detailTableView.snp.makeConstraints { make in
+            make.edges.equalTo(view.safeAreaLayoutGuide)
         }
-        
-        textLabel.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(20)
-            make.trailing.equalToSuperview().offset(-20)
-            make.top.equalTo(dateLabel.snp.bottom).offset(10)
-        }
-        
-        commentLabel.snp.makeConstraints { make in
-            make.top.equalTo(textLabel.snp.bottom).offset(20)
-            make.leading.equalTo(dateLabel)
-        }
-        
-        usernameLabel.text = currentPost?.user.username
-        let changedDate = Date().dateStringToDate(currentPost!.createdAt)
-        dateLabel.text = changedDate
-        textLabel.text = currentPost?.text
-        commentLabel.text = "댓글 \(currentPost!.comments.count)개"
     }
     
     @objc func menuButtonTapped() {
@@ -158,5 +115,34 @@ class PostDetailViewController: UIViewController {
         alert.addAction(cancel)
         
         present(alert, animated: true, completion: nil)
+    }
+}
+
+extension PostDetailViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 2
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "Cell") else {
+            return UITableViewCell()
+        }
+        cell.backgroundColor = .white
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return UITableView.automaticDimension
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView = PostHeaderView()
+        
+        headerView.usernameLabel.text = currentPost?.user.username
+        let changedDate = Date().dateStringToDate(currentPost!.createdAt)
+        headerView.dateLabel.text = changedDate
+        headerView.textLabel.text = currentPost?.text
+        headerView.commentLabel.text = "댓글 \(currentPost!.comments.count)개"
+        return headerView
     }
 }

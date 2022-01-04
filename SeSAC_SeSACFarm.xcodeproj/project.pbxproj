@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		CB4554EA278415B800FF359C /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB4554E9278415B800FF359C /* Comment.swift */; };
+		CB4554EC278419EA00FF359C /* DetailPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB4554EB278419EA00FF359C /* DetailPost.swift */; };
 		CB794BEB278199DF00DCA4DC /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB794BEA278199DF00DCA4DC /* UIColor+Extension.swift */; };
 		CB794BEF27819BA300DCA4DC /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB794BEE27819BA300DCA4DC /* RegisterViewController.swift */; };
 		CB794BF127819BC700DCA4DC /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB794BF027819BC700DCA4DC /* LoginViewController.swift */; };
@@ -41,6 +42,7 @@
 
 /* Begin PBXFileReference section */
 		CB4554E9278415B800FF359C /* Comment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Comment.swift; sourceTree = "<group>"; };
+		CB4554EB278419EA00FF359C /* DetailPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailPost.swift; sourceTree = "<group>"; };
 		CB794BEA278199DF00DCA4DC /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		CB794BEE27819BA300DCA4DC /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		CB794BF027819BC700DCA4DC /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -202,6 +204,7 @@
 				CBF51BAA2781977E00EEAEB5 /* MainButton.swift */,
 				CBF51BAC2781978600EEAEB5 /* MainTextField.swift */,
 				CBF51BAE2781978C00EEAEB5 /* StartView.swift */,
+				CB4554EB278419EA00FF359C /* DetailPost.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -322,6 +325,7 @@
 				CBE5B7692781C7A300828151 /* PostViewModel.swift in Sources */,
 				CBF51BB7278197BF00EEAEB5 /* APIService.swift in Sources */,
 				CBF51BB22781979C00EEAEB5 /* User.swift in Sources */,
+				CB4554EC278419EA00FF359C /* DetailPost.swift in Sources */,
 				CBE5B7672781C63A00828151 /* Post.swift in Sources */,
 				CBE5B77E2781FE8800828151 /* PostEditorViewModel.swift in Sources */,
 				CB794BEB278199DF00DCA4DC /* UIColor+Extension.swift in Sources */,
