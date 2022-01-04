@@ -54,13 +54,16 @@ class APIService {
     static func editPost(id: Int, text: String, completion: @escaping (PostElement?, APIError?) -> Void) {
         let loginToken = UserDefaults.standard.value(forKey: "token") ?? ""
         
-        let data = "text=\(text)".data(using: .utf8, allowLossyConversion: false)
-        
         var request = URLRequest(url: Endpoint.editPost(id: id).url)
         request.httpMethod = Method.PUT.rawValue
         request.setValue("Bearer \(loginToken)", forHTTPHeaderField: "Authorization")
         
-        URLSession.uploadRequest(endpoint: request, data: data!, completion: completion)
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let updateData = postData(text: text)
+        let updateJsonData = try? JSONEncoder().encode(updateData)
+        
+        URLSession.uploadRequest(endpoint: request, data: updateJsonData!, completion: completion)
     }
     
     static func deletePost(id: Int, completion: @escaping (PostElement?, APIError?) -> Void) {

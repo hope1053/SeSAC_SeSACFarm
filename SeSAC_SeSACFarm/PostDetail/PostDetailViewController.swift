@@ -147,6 +147,7 @@ class PostDetailViewController: UIViewController {
                 
                 vc.editCompletionHandler = { post in
                     self.viewModel.currentPost.value = post
+                    self.detailTableView.reloadData()
                 }
                 
                 self.navigationController?.pushViewController(vc, animated: true)
