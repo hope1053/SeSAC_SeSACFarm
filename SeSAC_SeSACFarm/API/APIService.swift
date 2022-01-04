@@ -84,4 +84,15 @@ class APIService {
         
         URLSession.request(endpoint: request, completion: completion)
     }
+    
+    static func addComment(comment: String, post: Int, completion: @escaping (DetailCommentElement?, APIError?) -> Void) {
+        var request = URLRequest(url: Endpoint.comment.url)
+        request.httpMethod = Method.POST.rawValue
+        request.httpBody = "comment=\(comment)&post=\(post)".data(using: .utf8, allowLossyConversion: false)
+        
+        let loginToken = UserDefaults.standard.value(forKey: "token") ?? ""
+        request.setValue("Bearer \(loginToken)", forHTTPHeaderField: "Authorization")
+        
+        URLSession.request(endpoint: request, completion: completion)
+    }
 }

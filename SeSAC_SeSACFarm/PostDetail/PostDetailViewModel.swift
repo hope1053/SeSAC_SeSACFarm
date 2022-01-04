@@ -31,6 +31,13 @@ class PostDetailViewModel {
             completion()
         }
     }
+    
+    func postComment(completion: @escaping () -> Void) {
+        APIService.addComment(comment: commentText.value, post: currentPost.value.id) { comment, error in
+            print(comment)
+            completion()
+        }
+    }
 }
 
 //extension PostDetailViewModel: TableViewCellRepresentable {

@@ -95,9 +95,18 @@ class PostDetailViewController: UIViewController {
         }
         
         commentView.commentTextView.delegate = self
+        commentView.addButton.addTarget(self, action: #selector(commentAddButtonTapped), for: .touchUpInside)
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(tapGesture))
         detailTableView.addGestureRecognizer(tap)
+    }
+    
+    @objc func commentAddButtonTapped() {
+        commentView.commentTextView.resignFirstResponder()
+        commentView.commentTextView.text = ""
+        viewModel.postComment {
+            self.loadCommenets()
+        }
     }
     
     @objc func tapGesture() {
