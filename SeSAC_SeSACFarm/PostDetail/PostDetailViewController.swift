@@ -14,6 +14,7 @@ class PostDetailViewController: UIViewController {
     
     let viewModel = PostDetailViewModel()
     var currentPost: PostElement?
+    var currentCommentList: DetailComment = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,14 +22,18 @@ class PostDetailViewController: UIViewController {
         detailTableView.delegate = self
         detailTableView.dataSource = self
         
-        detailTableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
+        detailTableView.register(PostDetailTableViewCell.self, forCellReuseIdentifier: PostDetailTableViewCell.identifier)
         
         view.backgroundColor = .white
         connectView()
         configureView()
-        
-        self.viewModel.getComments { comment in
-            print(comment)
+        loadCommenets()
+    }
+    
+    func loadCommenets() {
+        viewModel.getComments {
+            print(self.currentCommentList)
+            self.detailTableView.reloadData()
         }
     }
     
@@ -36,14 +41,16 @@ class PostDetailViewController: UIViewController {
         viewModel.currentPost.bind { post in
             self.currentPost = post
         }
+        
+        viewModel.currentComments.bind { commentList in
+            self.currentCommentList = commentList
+        }
     }
     
     func configureView() {
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "ellipsis"), style: .plain, target: self, action: #selector(menuButtonTapped))
         
         view.addSubview(detailTableView)
-        
-        detailTableView.backgroundColor = .brown
         
         detailTableView.snp.makeConstraints { make in
             make.edges.equalTo(view.safeAreaLayoutGuide)
@@ -120,14 +127,21 @@ class PostDetailViewController: UIViewController {
 
 extension PostDetailViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+        currentCommentList.count
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        UITableView.automaticDimension
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "Cell") else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: PostDetailTableViewCell.identifier, for: indexPath) as? PostDetailTableViewCell else {
             return UITableViewCell()
         }
-        cell.backgroundColor = .white
+        let row = currentCommentList[indexPath.row]
+        
+        cell.usernameLabel.text = row.user.username
+        cell.commentLabel.text = row.comment
         return cell
     }
     

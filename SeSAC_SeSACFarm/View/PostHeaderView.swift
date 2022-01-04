@@ -68,7 +68,6 @@ class PostHeaderView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureView()
-        self.backgroundColor = .yellow
     }
     
     required init?(coder: NSCoder) {
