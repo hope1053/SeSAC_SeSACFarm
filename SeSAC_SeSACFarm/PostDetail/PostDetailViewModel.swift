@@ -11,6 +11,7 @@ class PostDetailViewModel {
     
     var currentPost: Observable<PostElement> = Observable(PostElement(id: 0, text: "", user: Writer(id: 0, username: "", email: ""), createdAt: "", comments: []))
     var currentComments: Observable<DetailComment> = Observable([])
+    var commentText: Observable<String> = Observable("")
     
     func deletePost(completion: @escaping () -> Void) {
         let postID = currentPost.value.id

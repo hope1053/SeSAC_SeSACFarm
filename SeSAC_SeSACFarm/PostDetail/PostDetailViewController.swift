@@ -16,6 +16,7 @@ enum buttonType: String {
 class PostDetailViewController: UIViewController {
     
     let detailTableView = UITableView(frame: .zero, style: .grouped)
+    let commentView = CommentView()
     
     let viewModel = PostDetailViewModel()
     var currentPost: PostElement?
@@ -33,6 +34,26 @@ class PostDetailViewController: UIViewController {
         connectView()
         configureView()
         loadCommenets()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(adjustInputView), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(adjustInputView), name: UIResponder.keyboardWillHideNotification, object: nil)
+        
+        print(commentView.frame)
+    }
+    
+    @objc func adjustInputView(noti: Notification) {
+        guard let userInfo = noti.userInfo else { return }
+        guard let keyboardFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
+        
+        var adjustmentHeight: CGFloat = keyboardFrame.height - view.safeAreaInsets.bottom
+        
+        if noti.name == UIResponder.keyboardWillShowNotification {
+            commentView.frame.origin.y -= adjustmentHeight
+            print("willshow", commentView.frame)
+        } else {
+            commentView.frame.origin.y += adjustmentHeight
+            print("willhide", commentView.frame)
+        }
     }
     
     func loadCommenets() {
@@ -50,16 +71,37 @@ class PostDetailViewController: UIViewController {
         viewModel.currentComments.bind { commentList in
             self.currentCommentList = commentList
         }
+        
+        viewModel.commentText.bind { comment in
+            self.commentView.commentTextView.text = comment
+        }
     }
     
     func configureView() {
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "ellipsis"), style: .plain, target: self, action: #selector(menuButtonTapped))
         
         view.addSubview(detailTableView)
+        view.addSubview(commentView)
+        detailTableView.backgroundColor = .white
         
         detailTableView.snp.makeConstraints { make in
             make.edges.equalTo(view.safeAreaLayoutGuide)
         }
+        
+        commentView.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview()
+            make.bottom.equalTo(view.safeAreaLayoutGuide)
+            make.height.equalToSuperview().multipliedBy(0.08)
+        }
+        
+        commentView.commentTextView.delegate = self
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(tapGesture))
+        detailTableView.addGestureRecognizer(tap)
+    }
+    
+    @objc func tapGesture() {
+        commentView.commentTextView.resignFirstResponder()
     }
     
     @objc func menuButtonTapped() {
@@ -110,7 +152,7 @@ class PostDetailViewController: UIViewController {
     }
     
     func showAlert() {
-        let alert = UIAlertController(title: "알림", message: "본인이 작성한 글만 수정 및 삭제할 수 있습니다!", preferredStyle: .alert)
+        let alert = UIAlertController(title: "알림", message: "본인이 작성한 글/댓글만 수정 및 삭제할 수 있습니다!", preferredStyle: .alert)
         
         let ok = UIAlertAction(title: "확인", style: .default)
         alert.addAction(ok)
@@ -184,5 +226,11 @@ extension PostDetailViewController: UITableViewDelegate, UITableViewDataSource {
         headerView.textLabel.text = currentPost?.text
         headerView.commentLabel.text = "댓글 \(currentPost!.comments.count)개"
         return headerView
+    }
+}
+
+extension PostDetailViewController: UITextViewDelegate {
+    func textViewDidChange(_ textView: UITextView) {
+        viewModel.commentText.value = textView.text ?? ""
     }
 }
