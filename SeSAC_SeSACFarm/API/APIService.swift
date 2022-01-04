@@ -95,4 +95,13 @@ class APIService {
         
         URLSession.request(endpoint: request, completion: completion)
     }
+    
+    static func deleteComment(id: Int, completion: @escaping (DetailCommentElement?, APIError?) -> Void) {
+        var request = URLRequest(url: Endpoint.editComment(id: id).url)
+        request.httpMethod = Method.DELETE.rawValue
+        let loginToken = UserDefaults.standard.value(forKey: "token") ?? ""
+        request.setValue("Bearer \(loginToken)", forHTTPHeaderField: "Authorization")
+        
+        URLSession.request(endpoint: request, completion: completion)
+    }
 }

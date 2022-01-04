@@ -58,7 +58,6 @@ class PostDetailViewController: UIViewController {
     
     func loadCommenets() {
         viewModel.getComments {
-            print(self.currentCommentList)
             self.detailTableView.reloadData()
         }
     }
@@ -125,7 +124,7 @@ class PostDetailViewController: UIViewController {
         }
     }
     
-    func showActionSheet(type: buttonType) {
+    func showActionSheet(type: buttonType, index: Int? = 0) {
         let alert = UIAlertController(title: "메뉴", message: "", preferredStyle: .actionSheet)
         
         let edit = UIAlertAction(title: "수정", style: .default) { _ in
@@ -169,7 +168,7 @@ class PostDetailViewController: UIViewController {
         present(alert, animated: true, completion: nil)
     }
     
-    func checkAlert(type: buttonType) {
+    func checkAlert(type: buttonType, index: Int? = 0) {
         let alert = UIAlertController(title: "알림", message: "정말로 삭제하시겠습니까?", preferredStyle: .alert)
         
         let ok = UIAlertAction(title: "확인", style: .default) { _ in
@@ -179,7 +178,9 @@ class PostDetailViewController: UIViewController {
                     self.navigationController?.popViewController(animated: true)
                 }
             case .comment:
-                print("댓글 삭제")
+                self.viewModel.deleteComment(index: index!) {
+                    self.loadCommenets()
+                }
             }
         }
         let cancel = UIAlertAction(title: "취소", style: .cancel)
@@ -214,7 +215,7 @@ extension PostDetailViewController: UITableViewDelegate, UITableViewDataSource {
             let myID = UserDefaults.standard.value(forKey: "id") as? Int
             
             if writerID == myID {
-                self.showActionSheet(type: .comment)
+                self.showActionSheet(type: .comment, index: indexPath.row)
             } else {
                 self.showAlert()
             }
