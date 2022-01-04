@@ -7,16 +7,25 @@
 
 import Foundation
 
-class PostAddViewModel {
+class PostEditorViewModel {
     var bodyText: Observable<String> = Observable("")
+    var id: Int = 0
     
     func postDetail(completion: @escaping () -> Void) {
         APIService.addPost(text: bodyText.value) { post, error in
+//            guard let post = post else {
+//                return
+//            }
+            completion()
+        }
+    }
+    
+    func editDetail(completion: @escaping (PostElement?) -> Void) {
+        APIService.editPost(id: id, text: bodyText.value) { post, error in
             guard let post = post else {
                 return
             }
-            print(post)
-            completion()
+            completion(post)
         }
     }
     

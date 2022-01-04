@@ -11,6 +11,7 @@ enum Method: String {
     case GET
     case POST
     case DELETE
+    case PUT
 }
 
 enum Endpoint {
@@ -18,6 +19,8 @@ enum Endpoint {
     case login
     case post
     case editPost(id: Int)
+    case comment
+    case editComment(id: Int)
 }
 
 extension Endpoint {
@@ -31,6 +34,10 @@ extension Endpoint {
             return .makeEndpoint("posts")
         case .editPost(id: let id):
             return .makeEndpoint("posts/\(id)")
+        case .comment:
+            return .makeEndpoint("comments")
+        case .editComment(id: let id):
+            return .makeEndpoint("comments/\(id)")
         }
     }
 }
@@ -74,10 +81,10 @@ extension URLSession {
                 
                 guard response.statusCode == 200 else {
                     if response.statusCode == 401 {
-                        print(response)
                         completion(nil, .invalidToken)
                         return
                     } else {
+                        print(response)
                         completion(nil, .failed)
                         return
                     }

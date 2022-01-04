@@ -19,4 +19,15 @@ class PostDetailViewModel {
         
     }
     
+    func getComments(completion: @escaping (DetailComment) -> Void) {
+        let postID = currentPost.value.id
+        APIService.viewComments(postID: postID) { comment, error in
+            guard let comment = comment else {
+                return
+            }
+            print(comment)
+            completion(comment)
+        }
+    }
+    
 }

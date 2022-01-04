@@ -25,13 +25,14 @@ class PostListViewController: UIViewController {
     var list: Post = []
     
     @objc func addPostButtonTapped() {
-        let vc = PostAddViewController()
+        let vc = PostEditorViewController()
+        vc.type = .add
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        print(UserDefaults.standard.value(forKey: "token"))
         view.backgroundColor = .white
         title = "새싹농장"
         

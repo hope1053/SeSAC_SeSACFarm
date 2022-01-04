@@ -57,7 +57,7 @@ extension PostViewModel: TableViewCellRepresentable {
     func didSelectRowAt(_ tableView: UITableView, indexPath: IndexPath) -> UIViewController {
         let vc = PostDetailViewController()
         let post = postList.value[indexPath.row]
-        vc.currentPost = post
+        vc.viewModel.currentPost.value = post
         return vc
     }
 }
