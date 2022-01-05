@@ -37,8 +37,6 @@ class PostDetailViewController: UIViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(adjustInputView), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(adjustInputView), name: UIResponder.keyboardWillHideNotification, object: nil)
-        
-        print(commentView.frame)
     }
     
     @objc func adjustInputView(noti: Notification) {

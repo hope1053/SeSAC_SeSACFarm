@@ -34,7 +34,9 @@ class APIService {
     
     static func viewPosts(completion: @escaping (Post?, APIError?) -> Void) {
         let loginToken = UserDefaults.standard.value(forKey: "token") ?? ""
-        var request = URLRequest(url: Endpoint.post.url)
+        var urlComponent = URLComponents(string: "\(Endpoint.post.url)")
+        urlComponent?.queryItems = [URLQueryItem(name: "_sort", value: "created_at:desc")]
+        var request = URLRequest(url: (urlComponent?.url!)!)
         request.httpMethod = Method.GET.rawValue
         request.setValue("Bearer \(loginToken)", forHTTPHeaderField: "Authorization")
         
