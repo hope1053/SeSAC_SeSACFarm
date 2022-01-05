@@ -16,8 +16,12 @@ class PostListViewController: UIViewController {
     
     let addPostButton: MainButton = {
         let button = MainButton()
-        button.cornerRadius = UIScreen.main.bounds.width * 0.22 * 0.5
+        button.setImage(UIImage(systemName: "plus"), for: .normal)
+        button.tintColor = .white
+        button.cornerRadius = UIScreen.main.bounds.width * 0.18 * 0.5
         button.addTarget(self, action: #selector(addPostButtonTapped), for: .touchUpInside)
+        let buttonConfiguration = UIImage.SymbolConfiguration(pointSize: 30)
+        button.setPreferredSymbolConfiguration(buttonConfiguration, forImageIn: .normal)
         return button
     }()
     
@@ -35,10 +39,14 @@ class PostListViewController: UIViewController {
         
         connectView()
         configureView()
+        viewModel.getTotalPostNum {
+            print(self.viewModel.totalNum)
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        viewModel.postList.value = []
         loadPosts()
     }
     
@@ -56,7 +64,6 @@ class PostListViewController: UIViewController {
                 windowScene.windows.first?.rootViewController = UINavigationController(rootViewController: MainViewController())
                 windowScene.windows.first?.makeKeyAndVisible()
             case .none:
-                print(self.viewModel.numberOfRowsInSection)
                 return
             }
         }
@@ -64,6 +71,7 @@ class PostListViewController: UIViewController {
     
     func configureView() {
         view.backgroundColor = .white
+        navigationController?.navigationBar.tintColor = .black
         title = "새싹농장"
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "gearshape"), style: .plain, target: self, action: #selector(settingButtonTapped))
@@ -78,10 +86,12 @@ class PostListViewController: UIViewController {
         
         postTableView.delegate = self
         postTableView.dataSource = self
+        postTableView.prefetchDataSource = self
         postTableView.register(PostTableViewCell.self, forCellReuseIdentifier: PostTableViewCell.identifier)
         
+        addPostButton.addShadow(CGSize(width:1, height: 4))
         addPostButton.snp.makeConstraints { make in
-            make.width.equalToSuperview().multipliedBy(0.22)
+            make.width.equalToSuperview().multipliedBy(0.18)
             make.height.equalTo(addPostButton.snp.width)
             make.trailing.equalToSuperview().offset(-20)
             make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-40)
@@ -110,5 +120,16 @@ extension PostListViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         UITableView.automaticDimension
+    }
+}
+
+extension PostListViewController: UITableViewDataSourcePrefetching {
+    func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+        for indexPath in indexPaths {
+            if viewModel.numberOfRowsInSection == indexPath.row + 1 && viewModel.numberOfRowsInSection < viewModel.totalNum {
+                viewModel.startNum += 100
+                loadPosts()
+            }
+        }
     }
 }

@@ -55,6 +55,7 @@ class PostDetailViewController: UIViewController {
     
     func configureView() {
         view.backgroundColor = .white
+        navigationController?.navigationBar.tintColor = .black
         
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "ellipsis"), style: .plain, target: self, action: #selector(menuButtonTapped))
         
@@ -74,11 +75,7 @@ class PostDetailViewController: UIViewController {
         
         commentView.commentTextView.delegate = self
         commentView.addButton.addTarget(self, action: #selector(commentAddButtonTapped), for: .touchUpInside)
-        commentView.layer.masksToBounds = false
-        commentView.layer.shadowColor = UIColor.black.cgColor
-        commentView.layer.shadowOffset = CGSize(width:0, height: -4)
-        commentView.layer.shadowOpacity = 0.1
-        commentView.layer.shadowRadius = 1
+        commentView.addShadow(CGSize(width:0, height: -4))
         
         commentView.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()

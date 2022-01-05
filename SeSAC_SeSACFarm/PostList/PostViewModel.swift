@@ -13,9 +13,13 @@ enum currentStatus: String {
 
 class PostViewModel {
     var postList: Observable<Post> = Observable([])
+    var totalNum: Int = 0
+    var startNum: Int = 0
     
     func getPostList(completion: @escaping (currentStatus?) -> Void) {
-        APIService.viewPosts { post, error in
+//        postList.value = []
+        APIService.viewPosts(startNum: startNum) { post, error in
+            print("getPostListCalled")
             if error == .invalidToken {
                 completion(.invalidToken)
                 return
@@ -24,9 +28,20 @@ class PostViewModel {
             guard let post = post else {
                 return
             }
-            self.postList.value = post
+            self.postList.value += post
             
             completion(nil)
+        }
+    }
+    
+    func getTotalPostNum(completion: @escaping () -> Void) {
+        APIService.getTotalPostNum { totalNum, error in
+            guard let totalNum = totalNum else {
+                return
+            }
+
+            self.totalNum = totalNum
+            completion()
         }
     }
 }

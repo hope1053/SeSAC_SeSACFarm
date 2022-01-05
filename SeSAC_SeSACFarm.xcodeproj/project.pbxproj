@@ -15,6 +15,7 @@
 		CB6322DF2785E023009D4EC8 /* SettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6322DE2785E023009D4EC8 /* SettingViewController.swift */; };
 		CB6322E12785E5DF009D4EC8 /* SettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6322E02785E5DF009D4EC8 /* SettingViewModel.swift */; };
 		CB6322E32785EB5F009D4EC8 /* Password.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6322E22785EB5F009D4EC8 /* Password.swift */; };
+		CB6322E52785F241009D4EC8 /* UIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB6322E42785F241009D4EC8 /* UIView+Extension.swift */; };
 		CB794BEB278199DF00DCA4DC /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB794BEA278199DF00DCA4DC /* UIColor+Extension.swift */; };
 		CB794BEF27819BA300DCA4DC /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB794BEE27819BA300DCA4DC /* RegisterViewController.swift */; };
 		CB794BF127819BC700DCA4DC /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB794BF027819BC700DCA4DC /* LoginViewController.swift */; };
@@ -55,6 +56,7 @@
 		CB6322DE2785E023009D4EC8 /* SettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewController.swift; sourceTree = "<group>"; };
 		CB6322E02785E5DF009D4EC8 /* SettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingViewModel.swift; sourceTree = "<group>"; };
 		CB6322E22785EB5F009D4EC8 /* Password.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Password.swift; sourceTree = "<group>"; };
+		CB6322E42785F241009D4EC8 /* UIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Extension.swift"; sourceTree = "<group>"; };
 		CB794BEA278199DF00DCA4DC /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		CB794BEE27819BA300DCA4DC /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 		CB794BF027819BC700DCA4DC /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -114,6 +116,7 @@
 				CB794BEA278199DF00DCA4DC /* UIColor+Extension.swift */,
 				CBE5B7642781C29300828151 /* UITextField+Extension.swift */,
 				CBE5B7702781ED1700828151 /* Date+Extension.swift */,
+				CB6322E42785F241009D4EC8 /* UIView+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -339,6 +342,7 @@
 				CBF51BAD2781978600EEAEB5 /* MainTextField.swift in Sources */,
 				CBF51BB5278197A500EEAEB5 /* Endpoint.swift in Sources */,
 				CBF51B902781968600EEAEB5 /* AppDelegate.swift in Sources */,
+				CB6322E52785F241009D4EC8 /* UIView+Extension.swift in Sources */,
 				CB794BF52781A36F00DCA4DC /* LoginViewModel.swift in Sources */,
 				CBF51BAF2781978C00EEAEB5 /* StartView.swift in Sources */,
 				CB4554F22784746300FF359C /* JSONData.swift in Sources */,

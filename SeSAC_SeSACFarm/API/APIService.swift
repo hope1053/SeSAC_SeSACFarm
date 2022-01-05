@@ -46,10 +46,14 @@ class APIService {
         URLSession.uploadRequest(endpoint: request, data: updateJsonData!, completion: completion)
     }
     
-    static func viewPosts(completion: @escaping (Post?, APIError?) -> Void) {
+    static func viewPosts(startNum: Int, completion: @escaping (Post?, APIError?) -> Void) {
         let loginToken = UserDefaults.standard.value(forKey: "token") ?? ""
         var urlComponent = URLComponents(string: "\(Endpoint.post.url)")
-        urlComponent?.queryItems = [URLQueryItem(name: "_sort", value: "created_at:desc")]
+        urlComponent?.queryItems = [
+            URLQueryItem(name: "_sort", value: "created_at:desc"),
+            URLQueryItem(name: "_start", value: "\(startNum)"),
+            URLQueryItem(name: "_limit", value: "100")
+        ]
         var request = URLRequest(url: (urlComponent?.url!)!)
         request.httpMethod = Method.GET.rawValue
         request.setValue("Bearer \(loginToken)", forHTTPHeaderField: "Authorization")
@@ -136,6 +140,15 @@ class APIService {
         var request = URLRequest(url: Endpoint.editComment(id: id).url)
         request.httpMethod = Method.DELETE.rawValue
         let loginToken = UserDefaults.standard.value(forKey: "token") ?? ""
+        request.setValue("Bearer \(loginToken)", forHTTPHeaderField: "Authorization")
+        
+        URLSession.request(endpoint: request, completion: completion)
+    }
+    
+    static func getTotalPostNum(completion: @escaping (Int?, APIError?) -> Void) {
+        let loginToken = UserDefaults.standard.value(forKey: "token") ?? ""
+        var request = URLRequest(url: Endpoint.totalPost.url)
+        request.httpMethod = Method.GET.rawValue
         request.setValue("Bearer \(loginToken)", forHTTPHeaderField: "Authorization")
         
         URLSession.request(endpoint: request, completion: completion)

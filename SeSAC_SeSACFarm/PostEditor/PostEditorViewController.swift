@@ -31,6 +31,7 @@ class PostEditorViewController: UIViewController {
     
     func configureView() {
         view.backgroundColor = .white
+        navigationController?.navigationBar.tintColor = .black
         
         switch type {
         case .add:

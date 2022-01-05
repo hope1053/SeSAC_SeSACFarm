@@ -62,6 +62,7 @@ class SettingViewController: UIViewController {
     func configureView() {
         title = "비밀번호 변경하기"
         view.backgroundColor = .white
+        navigationController?.navigationBar.tintColor = .black
         
         [currentPasswordTextField, newPasswordTextField, newPasswordCheckTextField, confirmButton].forEach { subView in
             view.addSubview(subView)
