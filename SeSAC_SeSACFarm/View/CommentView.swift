@@ -12,20 +12,25 @@ class CommentView: UIView {
     
     let commentTextView: UITextView = {
         let textView = UITextView()
-        textView.backgroundColor = .orange
+        textView.layer.cornerRadius = 10
         return textView
     }()
 
-    let addButton: UIButton = {
-        let button = UIButton()
+    let addButton: MainButton = {
+        let button = MainButton()
         button.setTitle("등록", for: .normal)
-        button.backgroundColor = UIColor().mainColor
         return button
     }()
     
     func configureView() {
+        
+        self.backgroundColor = .white
+        
         self.addSubview(commentTextView)
         self.addSubview(addButton)
+        
+        commentTextView.backgroundColor = .systemGray6
+        
         commentTextView.snp.makeConstraints { make in
             make.leading.top.equalToSuperview().offset(10)
             make.bottom.equalToSuperview().offset(-10)
@@ -41,7 +46,6 @@ class CommentView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.backgroundColor = .brown
         configureView()
     }
     

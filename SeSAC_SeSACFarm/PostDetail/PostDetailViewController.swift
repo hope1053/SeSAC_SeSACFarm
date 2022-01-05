@@ -72,14 +72,19 @@ class PostDetailViewController: UIViewController {
             make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-commentViewHeight)
         }
         
+        commentView.commentTextView.delegate = self
+        commentView.addButton.addTarget(self, action: #selector(commentAddButtonTapped), for: .touchUpInside)
+        commentView.layer.masksToBounds = false
+        commentView.layer.shadowColor = UIColor.black.cgColor
+        commentView.layer.shadowOffset = CGSize(width:0, height: -4)
+        commentView.layer.shadowOpacity = 0.1
+        commentView.layer.shadowRadius = 1
+        
         commentView.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
             make.bottom.equalTo(view.safeAreaLayoutGuide)
             make.height.equalToSuperview().multipliedBy(0.08)
         }
-        
-        commentView.commentTextView.delegate = self
-        commentView.addButton.addTarget(self, action: #selector(commentAddButtonTapped), for: .touchUpInside)
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(tapGesture))
         detailTableView.addGestureRecognizer(tap)
