@@ -32,6 +32,20 @@ class APIService {
         URLSession.request(endpoint: request, completion: completion)
     }
     
+    static func changePW(current: String, new: String, confirmNew: String, completion: @escaping (UserClass?, APIError?) -> Void) {
+        let loginToken = UserDefaults.standard.value(forKey: "token") ?? ""
+        
+        var request = URLRequest(url: Endpoint.changePW.url)
+        request.httpMethod = Method.POST.rawValue
+        request.setValue("Bearer \(loginToken)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let updateData = Password(currentPassword: current, newPassword: new, confirmNewPassword: confirmNew)
+        let updateJsonData = try? JSONEncoder().encode(updateData)
+        
+        URLSession.uploadRequest(endpoint: request, data: updateJsonData!, completion: completion)
+    }
+    
     static func viewPosts(completion: @escaping (Post?, APIError?) -> Void) {
         let loginToken = UserDefaults.standard.value(forKey: "token") ?? ""
         var urlComponent = URLComponents(string: "\(Endpoint.post.url)")
@@ -109,7 +123,6 @@ class APIService {
         
         let updateData = commentData(comment: comment, post: postID)
         let updateJsonData = try? JSONEncoder().encode(updateData)
-        print(updateJsonData)
 //        request.httpBody = "comment=\(comment)&post=\(postID)".data(using: .utf8, allowLossyConversion: false)
 //        request.httpBody = updateJsonData
         

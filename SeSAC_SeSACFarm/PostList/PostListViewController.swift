@@ -56,6 +56,7 @@ class PostListViewController: UIViewController {
                 windowScene.windows.first?.rootViewController = UINavigationController(rootViewController: MainViewController())
                 windowScene.windows.first?.makeKeyAndVisible()
             case .none:
+                print(self.viewModel.numberOfRowsInSection)
                 return
             }
         }
@@ -64,6 +65,8 @@ class PostListViewController: UIViewController {
     func configureView() {
         view.backgroundColor = .white
         title = "새싹농장"
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "gearshape"), style: .plain, target: self, action: #selector(settingButtonTapped))
         
         [postTableView, addPostButton].forEach { subView in
             self.view.addSubview(subView)
@@ -83,6 +86,10 @@ class PostListViewController: UIViewController {
             make.trailing.equalToSuperview().offset(-20)
             make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-40)
         }
+    }
+    
+    @objc func settingButtonTapped() {
+        self.navigationController?.pushViewController(SettingViewController(), animated: true)
     }
 }
 

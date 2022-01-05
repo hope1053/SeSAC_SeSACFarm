@@ -92,14 +92,12 @@ extension PostDetailViewController {
         guard let userInfo = noti.userInfo else { return }
         guard let keyboardFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
         
-        var adjustmentHeight: CGFloat = keyboardFrame.height - view.safeAreaInsets.bottom
+        let adjustmentHeight: CGFloat = keyboardFrame.height - view.safeAreaInsets.bottom
         
         if noti.name == UIResponder.keyboardWillShowNotification {
             commentView.frame.origin.y -= adjustmentHeight
-            print("willshow", commentView.frame)
         } else {
             commentView.frame.origin.y += adjustmentHeight
-            print("willhide", commentView.frame)
         }
     }
     

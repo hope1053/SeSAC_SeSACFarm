@@ -17,6 +17,7 @@ enum Method: String {
 enum Endpoint {
     case register
     case login
+    case changePW
     case post
     case editPost(id: Int)
     case comment
@@ -30,6 +31,8 @@ extension Endpoint {
             return .makeEndpoint("auth/local/register")
         case .login:
             return .makeEndpoint("auth/local")
+        case .changePW:
+            return .makeEndpoint("custom/change-password")
         case .post:
             return .makeEndpoint("posts")
         case .editPost(id: let id):
@@ -91,7 +94,6 @@ extension URLSession {
                         completion(nil, .invalidToken)
                         return
                     } else {
-                        print(response)
                         completion(nil, .failed)
                         return
                     }
@@ -132,7 +134,6 @@ extension URLSession {
                         completion(nil, .invalidToken)
                         return
                     } else {
-                        print(response)
                         completion(nil, .failed)
                         return
                     }
