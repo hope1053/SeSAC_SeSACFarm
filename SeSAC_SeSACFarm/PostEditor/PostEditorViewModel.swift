@@ -13,9 +13,6 @@ class PostEditorViewModel {
     
     func postDetail(completion: @escaping () -> Void) {
         APIService.addPost(text: bodyText.value) { post, error in
-//            guard let post = post else {
-//                return
-//            }
             completion()
         }
     }

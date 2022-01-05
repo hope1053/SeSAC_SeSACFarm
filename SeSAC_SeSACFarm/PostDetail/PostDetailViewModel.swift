@@ -16,7 +16,7 @@ class PostDetailViewModel {
     
     var currentPost: Observable<PostElement> = Observable(PostElement(id: 0, text: "", user: Writer(id: 0, username: "", email: ""), createdAt: "", comments: []))
     var currentComments: Observable<DetailComment> = Observable([])
-    var commentText: Observable<String> = Observable("")
+    var commentTextField: Observable<String> = Observable("")
     var currentCommentIndex: Int = 0
     var currentStatus: buttonStatus = .postComment
     
@@ -39,8 +39,7 @@ class PostDetailViewModel {
     }
     
     func postComment(completion: @escaping () -> Void) {
-        APIService.addComment(comment: commentText.value, post: currentPost.value.id) { comment, error in
-            print(comment)
+        APIService.addComment(comment: commentTextField.value, post: currentPost.value.id) { comment, error in
             completion()
         }
     }
@@ -54,8 +53,7 @@ class PostDetailViewModel {
     
     func updateComment(completion: @escaping () -> Void) {
         let id = currentComments.value[currentCommentIndex].id
-        APIService.updateComment(comment: commentText.value, postID: currentPost.value.id, commentID: id) { comment, error in
-            print(comment)
+        APIService.updateComment(comment: commentTextField.value, postID: currentPost.value.id, commentID: id) { comment, error in
             completion()
         }
     }
@@ -63,29 +61,40 @@ class PostDetailViewModel {
     func deleteComment(completion: @escaping () -> Void) {
         let id = currentComments.value[currentCommentIndex].id
         APIService.deleteComment(id: id) { comment, error in
-            print(comment)
             completion()
         }
     }
 }
 
-//extension PostDetailViewModel: TableViewCellRepresentable {
-//    var numberOfRowsInSection: Int {
-//        currentComments.value.count
-//    }
-//    
-//    func cellForRowAt(_ tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
-//        guard let cell = tableView.dequeueReusableCell(withIdentifier: "Cell") else {
-//            return UITableViewCell()
-//        }
-//        cell.backgroundColor = .white
-//        return cell
-//    }
-//    
-//    func didSelectRowAt(_ tableView: UITableView, indexPath: IndexPath) -> UIViewController {
-//        print(indexPath)
-//        return UIViewController()
-//    }
-//    
-//    
-//}
+extension PostDetailViewModel {
+    var numOfComments: Int {
+        currentComments.value.count
+    }
+    
+    var userID: Int {
+        currentPost.value.user.id
+    }
+    
+    var userName: String {
+        currentPost.value.user.username
+    }
+    
+    var postID: Int {
+        currentPost.value.id
+    }
+    
+    var postDetailText: String {
+        currentPost.value.text
+    }
+    
+    var createdDate: String {
+        Date().dateStringToDate(currentPost.value.createdAt)
+    }
+    
+}
+
+extension PostDetailViewModel {
+    func cellForRowAt(at indexPath: IndexPath) -> DetailCommentElement {
+        return currentComments.value[indexPath.row]
+    }
+}

@@ -70,7 +70,7 @@ class PostTableViewCell: UITableViewCell {
         postDetailLabel.snp.makeConstraints { make in
             make.top.equalTo(userLabel.snp.bottom).offset(10)
             make.leading.equalTo(userLabel.snp.leading)
-            make.trailing.equalToSuperview().offset(20)
+            make.trailing.equalToSuperview().offset(-20)
         }
         
         dateLabel.snp.makeConstraints { make in

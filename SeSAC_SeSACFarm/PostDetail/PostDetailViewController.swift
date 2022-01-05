@@ -17,41 +17,20 @@ class PostDetailViewController: UIViewController {
     
     let detailTableView = UITableView(frame: .zero, style: .grouped)
     let commentView = CommentView()
+
+    var currentCommentList: DetailComment = []
     
     let viewModel = PostDetailViewModel()
-    var currentPost: PostElement?
-    var currentCommentList: DetailComment = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        detailTableView.delegate = self
-        detailTableView.dataSource = self
-        
-        detailTableView.register(PostDetailTableViewCell.self, forCellReuseIdentifier: PostDetailTableViewCell.identifier)
-        
-        view.backgroundColor = .white
         connectView()
         configureView()
         loadCommenets()
         
         NotificationCenter.default.addObserver(self, selector: #selector(adjustInputView), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(adjustInputView), name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-    
-    @objc func adjustInputView(noti: Notification) {
-        guard let userInfo = noti.userInfo else { return }
-        guard let keyboardFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
-        
-        var adjustmentHeight: CGFloat = keyboardFrame.height - view.safeAreaInsets.bottom
-        
-        if noti.name == UIResponder.keyboardWillShowNotification {
-            commentView.frame.origin.y -= adjustmentHeight
-            print("willshow", commentView.frame)
-        } else {
-            commentView.frame.origin.y += adjustmentHeight
-            print("willhide", commentView.frame)
-        }
     }
     
     func loadCommenets() {
@@ -62,27 +41,35 @@ class PostDetailViewController: UIViewController {
     
     func connectView() {
         viewModel.currentPost.bind { post in
-            self.currentPost = post
+            self.detailTableView.reloadData()
         }
         
         viewModel.currentComments.bind { commentList in
             self.currentCommentList = commentList
         }
         
-        viewModel.commentText.bind { comment in
+        viewModel.commentTextField.bind { comment in
             self.commentView.commentTextView.text = comment
         }
     }
     
     func configureView() {
+        view.backgroundColor = .white
+        
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "ellipsis"), style: .plain, target: self, action: #selector(menuButtonTapped))
         
         view.addSubview(detailTableView)
         view.addSubview(commentView)
+        
         detailTableView.backgroundColor = .white
+        detailTableView.delegate = self
+        detailTableView.dataSource = self
+        detailTableView.register(PostDetailTableViewCell.self, forCellReuseIdentifier: PostDetailTableViewCell.identifier)
         
         detailTableView.snp.makeConstraints { make in
-            make.edges.equalTo(view.safeAreaLayoutGuide)
+            let commentViewHeight = UIScreen.main.bounds.height * 0.08
+            make.trailing.leading.top.equalTo(view.safeAreaLayoutGuide)
+            make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-commentViewHeight)
         }
         
         commentView.snp.makeConstraints { make in
@@ -96,6 +83,24 @@ class PostDetailViewController: UIViewController {
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(tapGesture))
         detailTableView.addGestureRecognizer(tap)
+    }
+}
+
+// MARK: Selector
+extension PostDetailViewController {
+    @objc func adjustInputView(noti: Notification) {
+        guard let userInfo = noti.userInfo else { return }
+        guard let keyboardFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
+        
+        var adjustmentHeight: CGFloat = keyboardFrame.height - view.safeAreaInsets.bottom
+        
+        if noti.name == UIResponder.keyboardWillShowNotification {
+            commentView.frame.origin.y -= adjustmentHeight
+            print("willshow", commentView.frame)
+        } else {
+            commentView.frame.origin.y += adjustmentHeight
+            print("willhide", commentView.frame)
+        }
     }
     
     @objc func commentAddButtonTapped() {
@@ -118,17 +123,15 @@ class PostDetailViewController: UIViewController {
     }
     
     @objc func menuButtonTapped() {
-        let writerID = currentPost?.user.id
-        // 로그인 다시 한 번 진행 후 확인해야함
+        let writerID = viewModel.userID
         let myID = UserDefaults.standard.value(forKey: "id") as? Int
         
-        if writerID == myID {
-            showActionSheet(type: .post)
-        } else {
-            showAlert()
-        }
+        writerID == myID ? showActionSheet(type: .post) : showAlert()
     }
-    
+}
+
+// MARK: Alert, ActionSheet
+extension PostDetailViewController {
     func showActionSheet(type: buttonType, index: Int? = 0) {
         let alert = UIAlertController(title: "메뉴", message: "", preferredStyle: .actionSheet)
         
@@ -136,16 +139,14 @@ class PostDetailViewController: UIViewController {
             switch type {
             case .post:
                 let vc = PostEditorViewController()
-                let id = self.currentPost?.id ?? 0
-                let text = self.currentPost?.text ?? ""
+                let id = self.viewModel.postID
+                let text = self.viewModel.postDetailText
                 
                 vc.type = .edit
                 vc.viewModel.id = id
                 vc.viewModel.bodyText.value = text
-                
                 vc.editCompletionHandler = { post in
                     self.viewModel.currentPost.value = post
-                    self.detailTableView.reloadData()
                 }
                 
                 self.navigationController?.pushViewController(vc, animated: true)
@@ -201,9 +202,10 @@ class PostDetailViewController: UIViewController {
     }
 }
 
+// MARK: TableViewDelegate, Datasource
 extension PostDetailViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        currentCommentList.count
+        viewModel.numOfComments
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -214,20 +216,15 @@ extension PostDetailViewController: UITableViewDelegate, UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: PostDetailTableViewCell.identifier, for: indexPath) as? PostDetailTableViewCell else {
             return UITableViewCell()
         }
-        let row = currentCommentList[indexPath.row]
+        let row = viewModel.cellForRowAt(at: indexPath)
         
         cell.usernameLabel.text = row.user.username
         cell.commentLabel.text = row.comment
         cell.commentEditButtonClosure = {
             let writerID = row.user.id
-            // 로그인 다시 한 번 진행 후 확인해야함
             let myID = UserDefaults.standard.value(forKey: "id") as? Int
             
-            if writerID == myID {
-                self.showActionSheet(type: .comment, index: indexPath.row)
-            } else {
-                self.showAlert()
-            }
+            writerID == myID ? self.showActionSheet(type: .comment, index: indexPath.row) : self.showAlert()
         }
         return cell
     }
@@ -238,18 +235,17 @@ extension PostDetailViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = PostHeaderView()
-        
-        headerView.usernameLabel.text = currentPost?.user.username
-        let changedDate = Date().dateStringToDate(currentPost!.createdAt)
-        headerView.dateLabel.text = changedDate
-        headerView.textLabel.text = currentPost?.text
-        headerView.commentLabel.text = "댓글 \(currentPost!.comments.count)개"
+        headerView.usernameLabel.text = viewModel.userName
+        headerView.dateLabel.text = viewModel.createdDate
+        headerView.textLabel.text = viewModel.postDetailText
+        headerView.commentLabel.text = "댓글 \(viewModel.numOfComments)개"
         return headerView
     }
 }
 
+// MARK: TextViewDelegate
 extension PostDetailViewController: UITextViewDelegate {
     func textViewDidChange(_ textView: UITextView) {
-        viewModel.commentText.value = textView.text ?? ""
+        viewModel.commentTextField.value = textView.text ?? ""
     }
 }

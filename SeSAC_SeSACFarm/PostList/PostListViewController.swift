@@ -13,6 +13,7 @@ import SnapKit
 class PostListViewController: UIViewController {
     
     let postTableView = UITableView()
+    
     let addPostButton: MainButton = {
         let button = MainButton()
         button.cornerRadius = UIScreen.main.bounds.width * 0.22 * 0.5
@@ -20,48 +21,31 @@ class PostListViewController: UIViewController {
         return button
     }()
     
-    let viewModel = PostViewModel()
-    
-    var list: Post = []
-    
     @objc func addPostButtonTapped() {
         let vc = PostEditorViewController()
         vc.type = .add
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
+    let viewModel = PostViewModel()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(UserDefaults.standard.value(forKey: "token"))
-        view.backgroundColor = .white
-        title = "새싹농장"
+        print(UserDefaults.standard.value(forKey: "token") as! String)
         
         connectView()
         configureView()
-        configureTableView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
         loadPosts()
-    }
-    
-    func configureTableView() {
-        postTableView.delegate = self
-        postTableView.dataSource = self
-        
-        postTableView.register(PostTableViewCell.self, forCellReuseIdentifier: PostTableViewCell.identifier)
-        
-        postTableView.rowHeight = UITableView.automaticDimension
     }
     
     func connectView() {
         viewModel.postList.bind { post in
-            self.list = post
+            self.postTableView.reloadData()
         }
-        
-        loadPosts()
     }
     
     func loadPosts() {
@@ -71,13 +55,16 @@ class PostListViewController: UIViewController {
                 guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene else { return }
                 windowScene.windows.first?.rootViewController = UINavigationController(rootViewController: MainViewController())
                 windowScene.windows.first?.makeKeyAndVisible()
-            case .reloadTableView:
-                self.postTableView.reloadData()
+            case .none:
+                return
             }
         }
     }
     
     func configureView() {
+        view.backgroundColor = .white
+        title = "새싹농장"
+        
         [postTableView, addPostButton].forEach { subView in
             self.view.addSubview(subView)
         }
@@ -85,6 +72,10 @@ class PostListViewController: UIViewController {
         postTableView.snp.makeConstraints { make in
             make.top.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
         }
+        
+        postTableView.delegate = self
+        postTableView.dataSource = self
+        postTableView.register(PostTableViewCell.self, forCellReuseIdentifier: PostTableViewCell.identifier)
         
         addPostButton.snp.makeConstraints { make in
             make.width.equalToSuperview().multipliedBy(0.22)
@@ -94,6 +85,7 @@ class PostListViewController: UIViewController {
         }
     }
 }
+
 
 extension PostListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -107,5 +99,9 @@ extension PostListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let viewController = viewModel.didSelectRowAt(tableView, indexPath: indexPath)
         self.navigationController?.pushViewController(viewController, animated: true)
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        UITableView.automaticDimension
     }
 }

@@ -19,31 +19,30 @@ class PostEditorViewController: UIViewController {
     var editCompletionHandler: ((PostElement) -> Void)?
     
     var type: EditingType = .add
-    
     let detailTextView = UITextView()
     let viewModel = PostEditorViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .white
-        
-        detailTextView.delegate = self
-        
         configureView()
         connectView()
     }
     
     func configureView() {
+        view.backgroundColor = .white
+        
         switch type {
         case .add:
             title = "새싹농장 글쓰기"
         case .edit:
             title = "새싹농장 글 수정하기"
         }
+        
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "완료", style: .plain, target: self, action: #selector(completedButtonTapped))
         
         view.addSubview(detailTextView)
+        detailTextView.delegate = self
         detailTextView.snp.makeConstraints { make in
             make.edges.equalTo(view.safeAreaLayoutGuide)
         }
@@ -63,7 +62,6 @@ class PostEditorViewController: UIViewController {
             }
         case .edit:
             viewModel.editDetail { post in
-                print(post)
                 self.editCompletionHandler?(post!)
                 self.navigationController?.popViewController(animated: true)
             }
