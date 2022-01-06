@@ -30,7 +30,6 @@
 		CBE5B7672781C63A00828151 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE5B7662781C63A00828151 /* Post.swift */; };
 		CBE5B7692781C7A300828151 /* PostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE5B7682781C7A300828151 /* PostViewModel.swift */; };
 		CBE5B76B2781E19B00828151 /* PostTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE5B76A2781E19B00828151 /* PostTableViewCell.swift */; };
-		CBE5B76F2781E2B600828151 /* TableViewCellRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE5B76E2781E2B600828151 /* TableViewCellRepresentable.swift */; };
 		CBE5B7712781ED1700828151 /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE5B7702781ED1700828151 /* Date+Extension.swift */; };
 		CBE5B7742781F6D200828151 /* PostDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE5B7732781F6D200828151 /* PostDetailViewController.swift */; };
 		CBE5B77C2781FB9A00828151 /* PostEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE5B77B2781FB9A00828151 /* PostEditorViewController.swift */; };
@@ -71,7 +70,6 @@
 		CBE5B7662781C63A00828151 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		CBE5B7682781C7A300828151 /* PostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostViewModel.swift; sourceTree = "<group>"; };
 		CBE5B76A2781E19B00828151 /* PostTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostTableViewCell.swift; sourceTree = "<group>"; };
-		CBE5B76E2781E2B600828151 /* TableViewCellRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewCellRepresentable.swift; sourceTree = "<group>"; };
 		CBE5B7702781ED1700828151 /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
 		CBE5B7732781F6D200828151 /* PostDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailViewController.swift; sourceTree = "<group>"; };
 		CBE5B77B2781FB9A00828151 /* PostEditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostEditorViewController.swift; sourceTree = "<group>"; };
@@ -155,14 +153,6 @@
 			path = PostList;
 			sourceTree = "<group>";
 		};
-		CBE5B76D2781E2AF00828151 /* Protocol */ = {
-			isa = PBXGroup;
-			children = (
-				CBE5B76E2781E2B600828151 /* TableViewCellRepresentable.swift */,
-			);
-			path = Protocol;
-			sourceTree = "<group>";
-		};
 		CBE5B7722781F6B500828151 /* PostDetail */ = {
 			isa = PBXGroup;
 			children = (
@@ -201,7 +191,6 @@
 		CBF51B8E2781968600EEAEB5 /* SeSAC_SeSACFarm */ = {
 			isa = PBXGroup;
 			children = (
-				CBE5B76D2781E2AF00828151 /* Protocol */,
 				CB794BE9278199D500DCA4DC /* Extension */,
 				CBF51BB32781979F00EEAEB5 /* API */,
 				CBF51BB02781979500EEAEB5 /* Struct */,
@@ -362,7 +351,6 @@
 				CB794BFA2781A39700DCA4DC /* PostListViewController.swift in Sources */,
 				CBE5B7802782065E00828151 /* PostDetailViewModel.swift in Sources */,
 				CB794BF32781A36400DCA4DC /* RegisterViewModel.swift in Sources */,
-				CBE5B76F2781E2B600828151 /* TableViewCellRepresentable.swift in Sources */,
 				CBF51BA5278196C400EEAEB5 /* MainViewController.swift in Sources */,
 				CBE5B77C2781FB9A00828151 /* PostEditorViewController.swift in Sources */,
 				CB6322DF2785E023009D4EC8 /* SettingViewController.swift in Sources */,

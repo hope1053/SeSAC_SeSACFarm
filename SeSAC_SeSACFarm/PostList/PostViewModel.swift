@@ -46,7 +46,7 @@ class PostViewModel {
     }
 }
 
-extension PostViewModel: TableViewCellRepresentable {
+extension PostViewModel {
     
     var numberOfRowsInSection: Int {
         postList.value.count

@@ -216,7 +216,7 @@ extension PostDetailViewController {
 // MARK: TableViewDelegate, Datasource
 extension PostDetailViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        viewModel.numOfComments
+        viewModel.numberOfRowsInSection
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -245,12 +245,7 @@ extension PostDetailViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = PostHeaderView()
-        headerView.usernameLabel.text = viewModel.userName
-        headerView.dateLabel.text = viewModel.createdDate
-        headerView.textLabel.text = viewModel.postDetailText
-        headerView.commentLabel.text = "댓글 \(viewModel.numOfComments)개"
-        return headerView
+        viewModel.viewForHeaderInSection()
     }
 }
 

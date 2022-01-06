@@ -70,10 +70,6 @@ class PostDetailViewModel {
 }
 
 extension PostDetailViewModel {
-    var numOfComments: Int {
-        currentComments.value.count
-    }
-    
     var userID: Int {
         currentPost.value.user.id
     }
@@ -97,7 +93,21 @@ extension PostDetailViewModel {
 }
 
 extension PostDetailViewModel {
+    
+    var numberOfRowsInSection: Int {
+        currentComments.value.count
+    }
+    
     func cellForRowAt(at indexPath: IndexPath) -> DetailCommentElement {
         return currentComments.value[indexPath.row]
+    }
+    
+    func viewForHeaderInSection() -> UIView {
+        let headerView = PostHeaderView()
+        headerView.usernameLabel.text = userName
+        headerView.dateLabel.text = createdDate
+        headerView.textLabel.text = postDetailText
+        headerView.commentLabel.text = "댓글 \(numberOfRowsInSection)개"
+        return headerView
     }
 }
