@@ -36,16 +36,6 @@ class RegisterViewModel {
     }
     
     func trasnform(input: Input) -> Output {
-        print(input.emailText)
-        
-//        let currentEmail = input.emailText
-//            .subscribe { value in
-//
-//            }
-//            .disposed(by: DisposeBag())
-//        let currentUserName
-//        let currentPassword
-        
         let emailValidation = input.emailText
             .orEmpty
             .map { $0.contains("@") && $0.contains(".") }
