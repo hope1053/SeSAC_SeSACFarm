@@ -245,7 +245,12 @@ extension PostDetailViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        viewModel.viewForHeaderInSection()
+        let headerView = PostHeaderView()
+        headerView.usernameLabel.text = viewModel.userName
+        headerView.dateLabel.text = viewModel.createdDate
+        headerView.textLabel.text = viewModel.postDetailText
+        headerView.commentLabel.text = "댓글 \(viewModel.numberOfRowsInSection)개"
+        return headerView
     }
 }
 
