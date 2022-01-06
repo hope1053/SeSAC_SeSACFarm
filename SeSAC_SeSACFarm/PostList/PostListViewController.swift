@@ -25,15 +25,6 @@ class PostListViewController: UIViewController {
         return button
     }()
     
-    @objc func addPostButtonTapped() {
-        let vc = PostEditorViewController()
-        vc.type = .add
-        vc.postCompletionHandler = {
-            self.view.makeToast("게시물이 작성됐습니다", duration: 1.0, position: .top)
-        }
-        self.navigationController?.pushViewController(vc, animated: true)
-    }
-    
     let viewModel = PostViewModel()
     
     override func viewDidLoad() {
@@ -42,13 +33,10 @@ class PostListViewController: UIViewController {
         
         connectView()
         configureView()
-        viewModel.getTotalPostNum {
-            print(self.viewModel.totalNum)
-        }
+        viewModel.getTotalPostNum()
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        print(#function)
         super.viewWillAppear(animated)
         viewModel.reloadData()
         loadPosts()
@@ -57,19 +45,6 @@ class PostListViewController: UIViewController {
     func connectView() {
         viewModel.postList.bind { post in
             self.postTableView.reloadData()
-        }
-    }
-    
-    func loadPosts() {
-        self.viewModel.getPostList { status in
-            switch status {
-            case .invalidToken:
-                guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene else { return }
-                windowScene.windows.first?.rootViewController = UINavigationController(rootViewController: MainViewController())
-                windowScene.windows.first?.makeKeyAndVisible()
-            case .none:
-                return
-            }
         }
     }
     
@@ -100,6 +75,28 @@ class PostListViewController: UIViewController {
             make.trailing.equalToSuperview().offset(-20)
             make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-40)
         }
+    }
+    
+    func loadPosts() {
+        self.viewModel.getPostList { status in
+            switch status {
+            case .invalidToken:
+                guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene else { return }
+                windowScene.windows.first?.rootViewController = UINavigationController(rootViewController: MainViewController())
+                windowScene.windows.first?.makeKeyAndVisible()
+            case .none:
+                return
+            }
+        }
+    }
+    
+    @objc func addPostButtonTapped() {
+        let vc = PostEditorViewController()
+        vc.type = .add
+        vc.postCompletionHandler = {
+            self.view.makeToast("게시물이 작성됐습니다", duration: 1.0, position: .top)
+        }
+        self.navigationController?.pushViewController(vc, animated: true)
     }
     
     @objc func settingButtonTapped() {

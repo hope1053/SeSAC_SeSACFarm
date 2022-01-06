@@ -61,7 +61,6 @@ class PostDetailViewModel {
     }
     
     func deleteComment(index: Int, completion: @escaping () -> Void) {
-
         let id = currentComments.value[index].id
         APIService.deleteComment(id: id) { comment, error in
             self.getComments()

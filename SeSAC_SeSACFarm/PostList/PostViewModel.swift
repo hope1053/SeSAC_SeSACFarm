@@ -36,14 +36,12 @@ class PostViewModel {
         }
     }
     
-    func getTotalPostNum(completion: @escaping () -> Void) {
+    func getTotalPostNum() {
         APIService.getTotalPostNum { totalNum, error in
             guard let totalNum = totalNum else {
                 return
             }
-
             self.totalNum = totalNum
-            completion()
         }
     }
 }

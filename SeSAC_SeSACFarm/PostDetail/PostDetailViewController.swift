@@ -93,16 +93,20 @@ class PostDetailViewController: UIViewController {
 // MARK: Selector
 extension PostDetailViewController {
     @objc func adjustInputView(noti: Notification) {
-        print(noti.name)
         guard let userInfo = noti.userInfo else { return }
         guard let keyboardFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
         
         let adjustmentHeight: CGFloat = keyboardFrame.height - view.safeAreaInsets.bottom
         
+        if UserDefaults.standard.value(forKey: "originY") == nil {
+            UserDefaults.standard.set(commentView.frame.origin.y - adjustmentHeight, forKey: "changedY")
+            UserDefaults.standard.set(commentView.frame.origin.y, forKey: "originY")
+        }
+        
         if noti.name == UIResponder.keyboardWillShowNotification {
-            commentView.frame.origin.y -= adjustmentHeight
+            commentView.frame.origin.y = UserDefaults.standard.value(forKey: "changedY") as! CGFloat
         } else {
-            commentView.frame.origin.y += adjustmentHeight
+            commentView.frame.origin.y = UserDefaults.standard.value(forKey: "originY") as! CGFloat
         }
     }
     
