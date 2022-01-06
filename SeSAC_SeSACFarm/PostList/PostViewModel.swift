@@ -16,10 +16,13 @@ class PostViewModel {
     var totalNum: Int = 0
     var startNum: Int = 0
     
+    func reloadData() {
+        postList.value = []
+        startNum = 0
+    }
+    
     func getPostList(completion: @escaping (currentStatus?) -> Void) {
-//        postList.value = []
         APIService.viewPosts(startNum: startNum) { post, error in
-            print("getPostListCalled")
             if error == .invalidToken {
                 completion(.invalidToken)
                 return
@@ -29,7 +32,6 @@ class PostViewModel {
                 return
             }
             self.postList.value += post
-            
             completion(nil)
         }
     }

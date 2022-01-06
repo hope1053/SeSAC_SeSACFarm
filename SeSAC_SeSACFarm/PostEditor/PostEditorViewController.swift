@@ -17,9 +17,14 @@ enum EditingType: String {
 class PostEditorViewController: UIViewController {
     
     var editCompletionHandler: ((PostElement) -> Void)?
+    var postCompletionHandler: (() -> Void)?
     
     var type: EditingType = .add
-    let detailTextView = UITextView()
+    let detailTextView: UITextView = {
+        let textView = UITextView()
+        textView.font = UIFont.systemFont(ofSize: 15)
+        return textView
+    }()
     let viewModel = PostEditorViewModel()
     
     override func viewDidLoad() {
@@ -45,7 +50,10 @@ class PostEditorViewController: UIViewController {
         view.addSubview(detailTextView)
         detailTextView.delegate = self
         detailTextView.snp.makeConstraints { make in
-            make.edges.equalTo(view.safeAreaLayoutGuide)
+            make.top.leading.equalTo(view.safeAreaInsets).offset(10)
+            make.trailing.equalTo(view.safeAreaInsets).offset(-10)
+            let height = UIScreen.main.bounds.height * 0.6
+            make.height.equalTo(height)
         }
     }
     
@@ -59,6 +67,7 @@ class PostEditorViewController: UIViewController {
         switch type {
         case .add:
             viewModel.postDetail {
+                self.postCompletionHandler?()
                 self.navigationController?.popViewController(animated: true)
             }
         case .edit:

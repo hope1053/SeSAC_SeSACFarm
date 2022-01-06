@@ -30,6 +30,7 @@ class CommentView: UIView {
         self.addSubview(addButton)
         
         commentTextView.backgroundColor = .systemGray6
+        commentTextView.font = UIFont.systemFont(ofSize: 15)
         
         commentTextView.snp.makeConstraints { make in
             make.leading.top.equalToSuperview().offset(10)

@@ -20,10 +20,24 @@ class StartView: UIView {
         return textField
     }()
     
+    let emailValidateLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 11)
+        label.textColor = .red
+        return label
+    }()
+    
     let nickNameTextField: MainTextField = {
         let textField = MainTextField()
         textField.placeholder = "닉네임"
         return textField
+    }()
+    
+    let usernameValidateLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 11)
+        label.textColor = .red
+        return label
     }()
     
     let passwordTextField: MainTextField = {
@@ -32,10 +46,24 @@ class StartView: UIView {
         return textField
     }()
     
+    let passwordValidateLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 11)
+        label.textColor = .red
+        return label
+    }()
+    
     let passwordCheckTextField: MainTextField = {
         let textField = MainTextField()
         textField.placeholder = "비밀번호 확인"
         return textField
+    }()
+    
+    let passwordConfirmValidateLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 11)
+        label.textColor = .red
+        return label
     }()
     
     let startButton: MainButton = {
@@ -72,9 +100,14 @@ class StartView: UIView {
         
         self.addSubview(stackView)
         
-        [emailTextField, nickNameTextField, passwordTextField, passwordCheckTextField, startButton].forEach { subView in
+        [emailTextField, emailValidateLabel, nickNameTextField, usernameValidateLabel, passwordTextField, passwordValidateLabel, passwordCheckTextField, passwordConfirmValidateLabel, startButton].forEach { subView in
             self.stackView.addArrangedSubview(subView)
         }
+        
+        emailValidateLabel.isHidden = true
+        usernameValidateLabel.isHidden = true
+        passwordValidateLabel.isHidden = true
+        passwordConfirmValidateLabel.isHidden = true
         
         stackView.snp.makeConstraints { make in
             make.width.equalToSuperview().multipliedBy(0.95)
@@ -84,7 +117,7 @@ class StartView: UIView {
         
         if type == "register" {
             stackView.snp.makeConstraints { make in
-                make.height.equalToSuperview().multipliedBy(0.3)
+                make.height.equalToSuperview().multipliedBy(0.4)
             }
         } else {
             nickNameTextField.isHidden = true

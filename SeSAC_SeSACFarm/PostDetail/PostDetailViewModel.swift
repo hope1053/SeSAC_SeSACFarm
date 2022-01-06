@@ -27,19 +27,19 @@ class PostDetailViewModel {
         }
     }
     
-    func getComments(completion: @escaping () -> Void) {
+    func getComments() {
         let postID = currentPost.value.id
         APIService.viewComments(postID: postID) { comment, error in
             guard let comment = comment else {
                 return
             }
             self.currentComments.value = comment
-            completion()
         }
     }
     
     func postComment(completion: @escaping () -> Void) {
         APIService.addComment(comment: commentTextField.value, post: currentPost.value.id) { comment, error in
+            self.getComments()
             completion()
         }
     }
@@ -54,13 +54,16 @@ class PostDetailViewModel {
     func updateComment(completion: @escaping () -> Void) {
         let id = currentComments.value[currentCommentIndex].id
         APIService.updateComment(comment: commentTextField.value, postID: currentPost.value.id, commentID: id) { comment, error in
+            self.getComments()
             completion()
         }
     }
     
-    func deleteComment(completion: @escaping () -> Void) {
-        let id = currentComments.value[currentCommentIndex].id
+    func deleteComment(index: Int, completion: @escaping () -> Void) {
+
+        let id = currentComments.value[index].id
         APIService.deleteComment(id: id) { comment, error in
+            self.getComments()
             completion()
         }
     }

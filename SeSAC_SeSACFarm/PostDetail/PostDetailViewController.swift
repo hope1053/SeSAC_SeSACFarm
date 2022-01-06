@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import Toast
 
 enum buttonType: String {
     case post
@@ -17,8 +18,6 @@ class PostDetailViewController: UIViewController {
     
     let detailTableView = UITableView(frame: .zero, style: .grouped)
     let commentView = CommentView()
-
-    var currentCommentList: DetailComment = []
     
     let viewModel = PostDetailViewModel()
     
@@ -27,16 +26,19 @@ class PostDetailViewController: UIViewController {
         
         connectView()
         configureView()
-        loadCommenets()
-        
+        viewModel.getComments()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         NotificationCenter.default.addObserver(self, selector: #selector(adjustInputView), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(adjustInputView), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
-    func loadCommenets() {
-        viewModel.getComments {
-            self.detailTableView.reloadData()
-        }
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     func connectView() {
@@ -45,7 +47,7 @@ class PostDetailViewController: UIViewController {
         }
         
         viewModel.currentComments.bind { commentList in
-            self.currentCommentList = commentList
+            self.detailTableView.reloadData()
         }
         
         viewModel.commentTextField.bind { comment in
@@ -76,7 +78,7 @@ class PostDetailViewController: UIViewController {
         commentView.commentTextView.delegate = self
         commentView.addButton.addTarget(self, action: #selector(commentAddButtonTapped), for: .touchUpInside)
         commentView.addShadow(CGSize(width:0, height: -4))
-        
+
         commentView.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
             make.bottom.equalTo(view.safeAreaLayoutGuide)
@@ -84,13 +86,14 @@ class PostDetailViewController: UIViewController {
         }
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(tapGesture))
-        detailTableView.addGestureRecognizer(tap)
+        view.addGestureRecognizer(tap)
     }
 }
 
 // MARK: Selector
 extension PostDetailViewController {
     @objc func adjustInputView(noti: Notification) {
+        print(noti.name)
         guard let userInfo = noti.userInfo else { return }
         guard let keyboardFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
         
@@ -109,17 +112,18 @@ extension PostDetailViewController {
         switch viewModel.currentStatus {
         case .postComment:
             viewModel.postComment {
-                self.loadCommenets()
+                self.view.makeToast("댓글이 등록됐습니다.", duration: 1.0, position: .top)
             }
         case .editComment:
             viewModel.updateComment {
-                self.loadCommenets()
+                self.view.makeToast("댓글이 수정됐습니다.", duration: 1.0, position: .top)
             }
         }
     }
     
     @objc func tapGesture() {
-        commentView.commentTextView.resignFirstResponder()
+        print("background tapped")
+        view.endEditing(true)
     }
     
     @objc func menuButtonTapped() {
@@ -158,7 +162,7 @@ extension PostDetailViewController {
             }
         }
         let delete = UIAlertAction(title: "삭제", style: .destructive) { _ in
-            self.checkAlert(type: type)
+            self.checkAlert(type: type, index: index)
         }
         let cancel = UIAlertAction(title: "취소", style: .cancel)
         
@@ -188,8 +192,8 @@ extension PostDetailViewController {
                     self.navigationController?.popViewController(animated: true)
                 }
             case .comment:
-                self.viewModel.deleteComment {
-                    self.loadCommenets()
+                self.viewModel.deleteComment(index: index!) {
+                    self.view.makeToast("댓글이 삭제됐습니다.", duration: 1.0, position: .top)
                 }
             }
         }

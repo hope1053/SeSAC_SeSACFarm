@@ -5,7 +5,6 @@
 //  Created by 최혜린 on 2022/01/02.
 //
 
-import Foundation
 import UIKit
 
 class MainButton: UIButton {
@@ -25,6 +24,16 @@ class MainButton: UIButton {
         }
         set {
             self.backgroundColor = newValue
+        }
+    }
+    
+    override var isEnabled: Bool {
+        didSet {
+            if isEnabled {
+                self.backgroundColor = UIColor().mainColor
+            } else {
+                self.backgroundColor = .systemGray6
+            }
         }
     }
     

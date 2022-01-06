@@ -45,8 +45,9 @@ class PostListViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        print(#function)
         super.viewWillAppear(animated)
-        viewModel.postList.value = []
+        viewModel.reloadData()
         loadPosts()
     }
     
