@@ -37,6 +37,15 @@ class RegisterViewModel {
     
     func trasnform(input: Input) -> Output {
         print(input.emailText)
+        
+//        let currentEmail = input.emailText
+//            .subscribe { value in
+//
+//            }
+//            .disposed(by: DisposeBag())
+//        let currentUserName
+//        let currentPassword
+        
         let emailValidation = input.emailText
             .orEmpty
             .map { $0.contains("@") && $0.contains(".") }
@@ -46,10 +55,6 @@ class RegisterViewModel {
             .orEmpty
             .map { $0.count <= 10 }
             .share(replay: 1, scope: .whileConnected)
-        
-        input.usernameText.subscribe { value in
-            print(value)
-        }
         
         let passwordValidation = input.passwordText
             .orEmpty

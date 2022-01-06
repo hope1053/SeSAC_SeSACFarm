@@ -78,13 +78,13 @@ class RegisterViewController: UIViewController {
             .drive(startView.passwordConfirmValidateLabel.rx.text)
             .disposed(by: disposeBag)
         
-//        output.tapEventResult
-//            .subscribe { _ in
-////                self.viewModel.postRegister {
-////                    <#code#>
-////                }
-//            }
-//            .disposed(by: disposeBag)
+        output.tapEventResult
+            .subscribe { _ in
+                self.viewModel.postRegister {
+                    self.navigationController?.popViewController(animated: true)
+                }
+            }
+            .disposed(by: disposeBag)
         
     }
     
@@ -105,7 +105,7 @@ class RegisterViewController: UIViewController {
         startView.nickNameTextField.addTarget(self, action: #selector(nickNameTextFieldDidChange), for: .editingChanged)
         startView.passwordTextField.addTarget(self, action: #selector(passwordTextFieldDidChange), for: .editingChanged)
         
-        startView.startButton.addTarget(self, action: #selector(registerButtonTapped), for: .touchUpInside)
+//        startView.startButton.addTarget(self, action: #selector(registerButtonTapped), for: .touchUpInside)
     }
     
     @objc func emailTextFieldDidChange(_ textField: UITextField) {

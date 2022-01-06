@@ -10,6 +10,8 @@ import SnapKit
 
 class SettingViewController: UIViewController {
     
+    var completion: (() -> Void)?
+    
     let currentPasswordTextField: MainTextField = {
         let textField = MainTextField()
         textField.placeholder = "현재 비밀번호"
@@ -110,8 +112,16 @@ class SettingViewController: UIViewController {
     }
     
     @objc func confirmButtonTapped() {
-        viewModel.changePassword {
-            self.navigationController?.popViewController(animated: true)
+        viewModel.changePassword { status in
+            switch status {
+            case .error:
+                self.view.makeToast("기존 비밀번호를 다시 확인해주세요", duration: 1, position: .top)
+            case .success:
+                self.completion?()
+                self.navigationController?.popViewController(animated: true)
+            case .differentInput:
+                self.view.makeToast("입력된 새로운 비밀번호가 일치하지 않습니다.", duration: 1, position: .top)
+            }
         }
     }
 }

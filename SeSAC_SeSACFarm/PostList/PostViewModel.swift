@@ -7,7 +7,7 @@
 
 import UIKit
 
-enum currentStatus: String {
+enum tokenStatus: String {
     case invalidToken
 }
 
@@ -21,7 +21,7 @@ class PostViewModel {
         startNum = 0
     }
     
-    func getPostList(completion: @escaping (currentStatus?) -> Void) {
+    func getPostList(completion: @escaping (tokenStatus?) -> Void) {
         APIService.viewPosts(startNum: startNum) { post, error in
             if error == .invalidToken {
                 completion(.invalidToken)

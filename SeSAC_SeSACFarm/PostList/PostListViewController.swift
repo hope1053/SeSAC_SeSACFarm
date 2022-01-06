@@ -28,6 +28,9 @@ class PostListViewController: UIViewController {
     @objc func addPostButtonTapped() {
         let vc = PostEditorViewController()
         vc.type = .add
+        vc.postCompletionHandler = {
+            self.view.makeToast("게시물이 작성됐습니다", duration: 1.0, position: .top)
+        }
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -100,6 +103,10 @@ class PostListViewController: UIViewController {
     }
     
     @objc func settingButtonTapped() {
+        let vc = SettingViewController()
+        vc.completion = {
+            self.view.makeToast("비밀번호가 변경됐습니다", duration: 1.0, position: .top)
+        }
         self.navigationController?.pushViewController(SettingViewController(), animated: true)
     }
 }

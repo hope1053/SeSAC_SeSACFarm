@@ -49,10 +49,15 @@ class LoginViewController: UIViewController {
     
     @objc func loginButtonTapped() {
         view.endEditing(true)
-        viewModel.postLogin {
-            guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene else { return }
-            windowScene.windows.first?.rootViewController = UINavigationController(rootViewController: PostListViewController())
-            windowScene.windows.first?.makeKeyAndVisible()
+        viewModel.postLogin { status in
+            switch status {
+            case .error:
+                self.view.makeToast("로그인 정보를 확인해주세요", duration: 1.0, position: .top)
+            case .success:
+                guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene else { return }
+                windowScene.windows.first?.rootViewController = UINavigationController(rootViewController: PostListViewController())
+                windowScene.windows.first?.makeKeyAndVisible()
+            }
         }
     }
 }

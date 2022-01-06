@@ -17,7 +17,7 @@ class PostDetailViewModel {
     var currentPost: Observable<PostElement> = Observable(PostElement(id: 0, text: "", user: Writer(id: 0, username: "", email: ""), createdAt: "", comments: []))
     var currentComments: Observable<DetailComment> = Observable([])
     var commentTextField: Observable<String> = Observable("")
-    var currentCommentIndex: Int = 0
+    var currentCommentIndex: Int = -1
     var currentStatus: buttonStatus = .postComment
     
     func deletePost(completion: @escaping () -> Void) {
@@ -55,6 +55,7 @@ class PostDetailViewModel {
         let id = currentComments.value[currentCommentIndex].id
         APIService.updateComment(comment: commentTextField.value, postID: currentPost.value.id, commentID: id) { comment, error in
             self.getComments()
+            self.currentCommentIndex = -1
             completion()
         }
     }

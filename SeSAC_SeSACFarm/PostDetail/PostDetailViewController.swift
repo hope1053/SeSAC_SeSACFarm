@@ -109,6 +109,9 @@ extension PostDetailViewController {
     @objc func commentAddButtonTapped() {
         commentView.commentTextView.resignFirstResponder()
         commentView.commentTextView.text = ""
+        if viewModel.currentCommentIndex == -1 {
+            viewModel.currentStatus = .postComment
+        }
         switch viewModel.currentStatus {
         case .postComment:
             viewModel.postComment {
@@ -122,7 +125,6 @@ extension PostDetailViewController {
     }
     
     @objc func tapGesture() {
-        print("background tapped")
         view.endEditing(true)
     }
     
@@ -150,6 +152,7 @@ extension PostDetailViewController {
                 vc.viewModel.id = id
                 vc.viewModel.bodyText.value = text
                 vc.editCompletionHandler = { post in
+                    self.view.makeToast("게시물이 수정됐습니다.", duration: 1.0, position: .top)
                     self.viewModel.currentPost.value = post
                 }
                 
